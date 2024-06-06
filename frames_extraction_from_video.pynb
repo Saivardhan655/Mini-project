@@ -1,0 +1,45 @@
+import os
+import cv2
+import numpy as np
+from tensorflow.keras.utils import to_categorical
+from sklearn.model_selection import train_test_split
+
+# Parameters
+data_dir = '/content/drive/MyDrive/mini projext/videos'
+img_size = (64, 64)  # Resize frames to 64x64
+frames_per_video = 30  # Use 30 frames per video
+num_classes = 700  # Number of action classes
+
+# Function to extract frames from a video
+def extract_frames(video_path, max_frames):
+    cap = cv2.VideoCapture(video_path)
+    frames = []
+    while len(frames) < max_frames:
+        ret, frame = cap.read()
+        if not ret:
+            break
+        frame = cv2.resize(frame, img_size)
+        frames.append(frame)
+    cap.release()
+    return np.array(frames)
+
+# Load dataset
+X = []
+y = []
+action_classes = sorted(os.listdir(data_dir))
+class_to_label = {action_class: i for i, action_class in enumerate(action_classes)}
+
+for action_class in action_classes:
+    action_folder = os.path.join(data_dir, action_class)
+    for video in os.listdir(action_folder):
+        video_path = os.path.join(action_folder, video)
+        frames = extract_frames(video_path, frames_per_video)
+        if len(frames) == frames_per_video:
+            X.append(frames)
+            y.append(class_to_label[action_class])
+
+X = np.array(X)
+y = to_categorical(y, num_classes=num_classes)
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
