@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Upload Results</title>
+    <style>
+        @keyframes blinkCursor {
+            50% {
+                border-right-color: transparent;
+            }
+        }
+
+        @keyframes typeAndDelete {
+            0%,
+            10% {
+                width: 0;
+            }
+            45%,
+            55% {
+                width: 6.2em;
+            } /* adjust width based on content */
+            90%,
+            100% {
+                width: 0;
+            }
+        }
+
+        body {
+            font-family: "Courier New", Courier, monospace;
+            background-color: #000;
+            color: #0f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #0f0;
+        }
+
+        .terminal-loader {
+            border: 0.1em solid #333;
+            background-color: #1a1a1a;
+            color: #0f0;
+            font-size: 1em;
+            padding: 1.5em 1em;
+            width: 80%;
+            max-width: 800px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+            margin-top: 20px;
+        }
+
+        .terminal-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1.5em;
+            background-color: #333;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            padding: 0 0.4em;
+            box-sizing: border-box;
+        }
+
+        .terminal-controls {
+            float: right;
+        }
+
+        .control {
+            display: inline-block;
+            width: 0.6em;
+            height: 0.6em;
+            margin-left: 0.4em;
+            border-radius: 50%;
+            background-color: #777;
+        }
+
+        .control.close {
+            background-color: #e33;
+        }
+
+        .control.minimize {
+            background-color: #ee0;
+        }
+
+        .control.maximize {
+            background-color: #0b0;
+        }
+
+        .terminal-title {
+            float: left;
+            line-height: 1.5em;
+            color: #eee;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 2em 0 0 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #000;
+            border: 1px solid #0f0;
+            border-radius: 5px;
+        }
+
+        .action {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .probability {
+            color: #666666;
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-loader">
+        <div class="terminal-header">
+            <div class="terminal-title"></div>
+            <div class="terminal-controls">
+                <div class="control close"></div>
+                <div class="control minimize"></div>
+                <div class="control maximize"></div>
+            </div>
+        </div>
+        <h1>Predicted Action</h1>
+        <ul>
+            {% for action, probability in predictions.items() %}
+            <li>
+                <div class="action">{{ action }}</div>
+                <!-- <div class="probability">Probability: {{ probability * 100 | round(2) }}%</div> -->
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
